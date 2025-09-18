@@ -1,0 +1,17 @@
+[package]
+name = "cvss"
+version = "0.1.0"
+edition = "2021"
+description = "A Rust library for representing and deserializing CVSS (Common Vulnerability Scoring System) data."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/your-username/cvss-rs"
+keywords = ["cvss", "security", "vulnerability", "scoring"]
+categories = ["parser-implementations", "data-structures", "security"]
+readme = "README.md"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[build-dependencies]
+serde_json = "1.0"
