@@ -1,0 +1,58 @@
+[
+  {
+    "name": "v4_0_example",
+    "input": {
+      "version": "4.0",
+      "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+      "baseScore": 9.3,
+      "baseSeverity": "CRITICAL",
+      "attackVector": "NETWORK",
+      "attackComplexity": "LOW",
+      "attackRequirements": "NONE",
+      "privilegesRequired": "NONE",
+      "userInteraction": "NONE",
+      "vulnConfidentialityImpact": "HIGH",
+      "vulnIntegrityImpact": "HIGH",
+      "vulnAvailabilityImpact": "HIGH",
+      "subConfidentialityImpact": "NONE",
+      "subIntegrityImpact": "NONE",
+      "subAvailabilityImpact": "NONE"
+    },
+    "expected": {
+      "version": "V4_0",
+      "base_score": 9.3,
+      "base_severity": "Critical"
+    }
+  },
+  {
+    "name": "v4_0_cve_example",
+    "input": {
+      "Automatable": "NOT_DEFINED",
+      "Recovery": "NOT_DEFINED",
+      "Safety": "NOT_DEFINED",
+      "attackComplexity": "LOW",
+      "attackRequirements": "PRESENT",
+      "attackVector": "NETWORK",
+      "baseScore": 5.9,
+      "baseSeverity": "MEDIUM",
+      "privilegesRequired": "LOW",
+      "providerUrgency": "NOT_DEFINED",
+      "subAvailabilityImpact": "NONE",
+      "subConfidentialityImpact": "NONE",
+      "subIntegrityImpact": "NONE",
+      "userInteraction": "PASSIVE",
+      "valueDensity": "NOT_DEFINED",
+      "vectorString": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:P/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "version": "4.0",
+      "vulnAvailabilityImpact": "NONE",
+      "vulnConfidentialityImpact": "HIGH",
+      "vulnIntegrityImpact": "LOW",
+      "vulnerabilityResponseEffort": "NOT_DEFINED"
+    },
+    "expected": {
+      "version": "V4_0",
+      "base_score": 5.9,
+      "base_severity": "Medium"
+    }
+  }
+]

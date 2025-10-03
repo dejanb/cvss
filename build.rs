@@ -19,11 +19,23 @@ struct Expected {
 }
 
 fn main() {
-    let out_dir = env::var_os("OUT_DIR").unwrap();
-    let dest_path = Path::new(&out_dir).join("generated_tests.rs");
+    generate_tests("v2", "CvssV2", "VersionV2", "generated_tests_v2.rs", true);
+    generate_tests("v3", "CvssV3", "VersionV3", "generated_tests.rs", false);
+    generate_tests("v4", "CvssV4", "VersionV4", "generated_tests_v4.rs", false);
+}
 
-    let test_data_path = "tests/v3_test_data.json";
-    let test_data = fs::read_to_string(test_data_path).unwrap();
+fn generate_tests(
+    version_str: &str,
+    cvss_type: &str,
+    version_type: &str,
+    output_file: &str,
+    is_v2: bool,
+) {
+    let out_dir = env::var_os("OUT_DIR").unwrap();
+    let dest_path = Path::new(&out_dir).join(output_file);
+
+    let test_data_path = format!("tests/{version_str}_test_data.json");
+    let test_data = fs::read_to_string(&test_data_path).unwrap();
     let test_cases: Vec<TestCase> = serde_json::from_str(&test_data).unwrap();
 
     let mut generated_code = Vec::new();
@@ -37,14 +49,14 @@ fn main() {
         writeln!(&mut generated_code, "\"#;").unwrap();
         writeln!(
             &mut generated_code,
-            "    let cvss: CvssV3 = serde_json::from_str(input_json).unwrap();\n"
+            "    let cvss: {cvss_type} = serde_json::from_str(input_json).unwrap();\n"
         )
         .unwrap();
 
         writeln!(
             &mut generated_code,
-            "    assert_eq!(cvss.version, VersionV3::{});",
-            case.expected.version
+            "    assert_eq!(cvss.version, {}::{});",
+            version_type, case.expected.version
         )
         .unwrap();
         writeln!(
@@ -53,12 +65,22 @@ fn main() {
             case.expected.base_score
         )
         .unwrap();
-        writeln!(
-            &mut generated_code,
-            "    assert_eq!(cvss.base_severity, Severity::{});",
-            case.expected.base_severity
-        )
-        .unwrap();
+
+        if is_v2 {
+            writeln!(
+                &mut generated_code,
+                "    assert_eq!(cvss.severity.unwrap(), Severity::{});",
+                case.expected.base_severity
+            )
+            .unwrap();
+        } else {
+            writeln!(
+                &mut generated_code,
+                "    assert_eq!(cvss.base_severity, Severity::{});",
+                case.expected.base_severity
+            )
+            .unwrap();
+        }
 
         if case.name == "v3_1_medium" {
             writeln!(
