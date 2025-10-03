@@ -27,13 +27,12 @@
 //!
 //! let cvss: CvssV3 = serde_json::from_str(json_data).unwrap();
 //!
-//! assert_eq!(cvss.version, "3.1");
+//! assert_eq!(cvss.version, VersionV3::V3_1);
 //! assert_eq!(cvss.base_score, 9.8);
 //! assert_eq!(cvss.base_severity, Severity::Critical);
 //! ```
 
-#![forbid(unsafe_code)]
-
 pub mod v2_0;
 pub mod v3;
 pub mod v4_0;
+pub mod version;

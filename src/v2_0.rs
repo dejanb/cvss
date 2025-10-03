@@ -2,12 +2,14 @@
 
 use serde::{Deserialize, Serialize};
 
+use crate::version::VersionV2;
+
 /// Represents a CVSS v2.0 score object.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CvssV2 {
     /// The version of the CVSS standard.
-    pub version: String,
+    pub version: VersionV2,
     /// The CVSS vector string.
     pub vector_string: String,
     /// The qualitative severity rating.
@@ -83,6 +85,7 @@ pub enum Impact {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::version::VersionV2;
 
     const SAMPLE_JSON: &str = r#"{
         "version": "2.0",
@@ -99,7 +102,7 @@ mod tests {
 
     fn sample_cvss_v2() -> CvssV2 {
         CvssV2 {
-            version: "2.0".to_string(),
+            version: VersionV2::V2_0,
             vector_string: "AV:N/AC:L/Au:N/C:P/I:P/A:P".to_string(),
             access_vector: AccessVector::Network,
             access_complexity: AccessComplexity::Low,

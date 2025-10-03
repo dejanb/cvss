@@ -2,12 +2,14 @@
 
 use serde::{Deserialize, Serialize};
 
+use crate::version::VersionV4;
+
 /// Represents a CVSS v4.0 score object.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CvssV4 {
     /// The version of the CVSS standard, which must be "4.0".
-    pub version: String,
+    pub version: VersionV4,
     /// The CVSS vector string.
     pub vector_string: String,
     /// The base score, a value between 0.0 and 10.0.
@@ -249,6 +251,7 @@ pub enum ProviderUrgency {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::version::VersionV4;
 
     const SAMPLE_JSON: &str = r#"{
         "version": "4.0",
@@ -294,7 +297,7 @@ mod tests {
 
     fn sample_cvss_v4() -> CvssV4 {
         CvssV4 {
-            version: "4.0".to_string(),
+            version: VersionV4::V4_0,
             vector_string: "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
                 .to_string(),
             base_score: 9.3,
@@ -344,7 +347,7 @@ mod tests {
     fn test_deserialize_cve_v4_0() {
         let cvss: CvssV4 = serde_json::from_str(CVE_SAMPLE_JSON).unwrap();
         let expected = CvssV4 {
-            version: "4.0".to_string(),
+            version: VersionV4::V4_0,
             vector_string: "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:P/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N"
                 .to_string(),
             base_score: 5.9,

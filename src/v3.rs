@@ -2,12 +2,14 @@
 
 use serde::{Deserialize, Serialize};
 
+use crate::version::VersionV3;
+
 /// Represents a CVSS v3.0 or v3.1 score object.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CvssV3 {
     /// The version of the CVSS standard.
-    pub version: String,
+    pub version: VersionV3,
     /// The CVSS vector string.
     pub vector_string: String,
     /// The base score, a value between 0.0 and 10.0.
@@ -82,42 +84,6 @@ pub enum Severity {
     High,
     Critical,
 }
-
-// impl<'de> Deserialize<'de> for Severity {
-//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-//     where
-//         D: Deserializer<'de>,
-//     {
-//         struct SeverityVisitor;
-
-//         impl<'de> de::Visitor<'de> for SeverityVisitor {
-//             type Value = Severity;
-
-//             fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-//                 formatter.write_str("a string representing severity")
-//             }
-
-//             fn visit_str<E>(self, value: &str) -> Result<Severity, E>
-//             where
-//                 E: de::Error,
-//             {
-//                 match value.to_uppercase().as_str() {
-//                     "NONE" => Ok(Severity::None),
-//                     "LOW" => Ok(Severity::Low),
-//                     "MEDIUM" => Ok(Severity::Medium),
-//                     "HIGH" => Ok(Severity::High),
-//                     "CRITICAL" => Ok(Severity::Critical),
-//                     _ => Err(E::unknown_variant(
-//                         value,
-//                         &["None", "Low", "Medium", "High", "Critical"],
-//                     )),
-//                 }
-//             }
-//         }
-
-//         deserializer.deserialize_str(SeverityVisitor)
-//     }
-// }
 
 /// Represents the attack vector metric.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -222,6 +188,7 @@ pub enum SecurityRequirement {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::version::VersionV3;
 
     const SAMPLE_JSON_V3_1: &str = r#"{
         "version": "3.1",
@@ -255,7 +222,7 @@ mod tests {
 
     fn sample_cvss_v3() -> CvssV3 {
         CvssV3 {
-            version: "3.1".to_string(),
+            version: VersionV3::V3_1,
             vector_string: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H".to_string(),
             attack_vector: AttackVector::Network,
             attack_complexity: AttackComplexity::Low,
@@ -297,7 +264,7 @@ mod tests {
     #[test]
     fn test_deserialize_v3_0() {
         let mut expected = sample_cvss_v3();
-        expected.version = "3.0".to_string();
+        expected.version = VersionV3::V3_0;
         expected.vector_string = "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H".to_string();
         let cvss: CvssV3 = serde_json::from_str(SAMPLE_JSON_V3_0).unwrap();
         assert_eq!(cvss, expected);
