@@ -9,6 +9,7 @@
 //!
 //! ```
 //! use cvss::v3::{CvssV3, Severity};
+//! use cvss::version::VersionV3;
 //!
 //! let json_data = r#"{
 //!   "version": "3.1",
