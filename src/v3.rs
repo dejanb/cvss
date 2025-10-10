@@ -17,21 +17,29 @@ pub struct CvssV3 {
     /// The qualitative severity rating for the base score.
     pub base_severity: Severity,
     /// The attack vector metric.
-    pub attack_vector: AttackVector,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_vector: Option<AttackVector>,
     /// The attack complexity metric.
-    pub attack_complexity: AttackComplexity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_complexity: Option<AttackComplexity>,
     /// The privileges required metric.
-    pub privileges_required: PrivilegesRequired,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privileges_required: Option<PrivilegesRequired>,
     /// The user interaction metric.
-    pub user_interaction: UserInteraction,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_interaction: Option<UserInteraction>,
     /// The scope metric.
-    pub scope: Scope,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scope: Option<Scope>,
     /// The confidentiality impact metric.
-    pub confidentiality_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidentiality_impact: Option<Impact>,
     /// The integrity impact metric.
-    pub integrity_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integrity_impact: Option<Impact>,
     /// The availability impact metric.
-    pub availability_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_impact: Option<Impact>,
 
     // Temporal Metrics
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -98,7 +106,7 @@ pub enum AttackVector {
 
 /// Represents the attack complexity metric.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum AttackComplexity {
     Low,
     High,
@@ -117,7 +125,7 @@ pub enum PrivilegesRequired {
 
 /// Represents the user interaction metric.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum UserInteraction {
     None,
     Required,
@@ -126,7 +134,7 @@ pub enum UserInteraction {
 
 /// Represents the scope metric.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum Scope {
     Unchanged,
     Changed,
@@ -135,7 +143,7 @@ pub enum Scope {
 
 /// Represents the impact metrics (confidentiality, integrity, availability).
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum Impact {
     High,
     Low,
@@ -167,7 +175,7 @@ pub enum RemediationLevel {
 
 /// Represents the report confidence metric.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum ReportConfidence {
     Unknown,
     Reasonable,
@@ -177,7 +185,7 @@ pub enum ReportConfidence {
 
 /// Represents the security requirement metric.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum SecurityRequirement {
     Low,
     Medium,

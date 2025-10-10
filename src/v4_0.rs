@@ -19,27 +19,38 @@ pub struct CvssV4 {
 
     // --- Base Metrics ---
     /// Attack Vector (AV).
-    pub attack_vector: AttackVector,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_vector: Option<AttackVector>,
     /// Attack Complexity (AC).
-    pub attack_complexity: AttackComplexity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_complexity: Option<AttackComplexity>,
     /// Attack Requirements (AT).
-    pub attack_requirements: AttackRequirements,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_requirements: Option<AttackRequirements>,
     /// Privileges Required (PR).
-    pub privileges_required: PrivilegesRequired,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privileges_required: Option<PrivilegesRequired>,
     /// User Interaction (UI).
-    pub user_interaction: UserInteraction,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_interaction: Option<UserInteraction>,
     /// Vulnerable System Confidentiality Impact (VC).
-    pub vuln_confidentiality_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vuln_confidentiality_impact: Option<Impact>,
     /// Vulnerable System Integrity Impact (VI).
-    pub vuln_integrity_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vuln_integrity_impact: Option<Impact>,
     /// Vulnerable System Availability Impact (VA).
-    pub vuln_availability_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vuln_availability_impact: Option<Impact>,
     /// Subsequent System Confidentiality Impact (SC).
-    pub sub_confidentiality_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_confidentiality_impact: Option<Impact>,
     /// Subsequent System Integrity Impact (SI).
-    pub sub_integrity_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_integrity_impact: Option<Impact>,
     /// Subsequent System Availability Impact (SA).
-    pub sub_availability_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_availability_impact: Option<Impact>,
 
     // --- Threat Metrics ---
     /// Exploit Maturity (E).
@@ -179,6 +190,7 @@ pub enum ExploitMaturity {
     Attacked,
     ProofOfConcept,
     Unreported,
+    NotDefined,
 }
 
 /// Requirement metrics (CR, IR, AR).

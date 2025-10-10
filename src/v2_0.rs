@@ -24,17 +24,23 @@ pub struct CvssV2 {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environmental_score: Option<f64>,
     /// The access vector metric.
-    pub access_vector: AccessVector,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_vector: Option<AccessVector>,
     /// The access complexity metric.
-    pub access_complexity: AccessComplexity,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_complexity: Option<AccessComplexity>,
     /// The authentication metric.
-    pub authentication: Authentication,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication: Option<Authentication>,
     /// The confidentiality impact metric.
-    pub confidentiality_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidentiality_impact: Option<Impact>,
     /// The integrity impact metric.
-    pub integrity_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integrity_impact: Option<Impact>,
     /// The availability impact metric.
-    pub availability_impact: Impact,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_impact: Option<Impact>,
 }
 
 /// Represents the qualitative severity rating of a vulnerability.

@@ -15,7 +15,8 @@ struct TestCase {
 struct Expected {
     version: String,
     base_score: f64,
-    base_severity: String,
+    #[serde(default)]
+    base_severity: Option<String>,
 }
 
 fn main() {
@@ -67,17 +68,19 @@ fn generate_tests(
         .unwrap();
 
         if is_v2 {
-            writeln!(
-                &mut generated_code,
-                "    assert_eq!(cvss.severity.unwrap(), Severity::{});",
-                case.expected.base_severity
-            )
-            .unwrap();
+            if let Some(base_severity) = &case.expected.base_severity {
+                writeln!(
+                    &mut generated_code,
+                    "    assert_eq!(cvss.severity.unwrap(), Severity::{});",
+                    base_severity
+                )
+                .unwrap();
+            }
         } else {
             writeln!(
                 &mut generated_code,
                 "    assert_eq!(cvss.base_severity, Severity::{});",
-                case.expected.base_severity
+                case.expected.base_severity.as_ref().unwrap()
             )
             .unwrap();
         }
@@ -91,7 +94,7 @@ fn generate_tests(
             .unwrap();
             writeln!(
                 &mut generated_code,
-                "    assert_eq!(cvss.attack_vector, AttackVector::Local);"
+                "    assert_eq!(cvss.attack_vector, Some(AttackVector::Local));"
             )
             .unwrap();
         }

@@ -54,5 +54,19 @@
       "base_score": 5.9,
       "base_severity": "Medium"
     }
+  },
+  {
+    "name": "v4_0_minimal",
+    "input": {
+      "version": "4.0",
+      "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+      "baseScore": 9.9,
+      "baseSeverity": "CRITICAL"
+    },
+    "expected": {
+      "version": "V4_0",
+      "base_score": 9.9,
+      "base_severity": "Critical"
+    }
   }
 ]
