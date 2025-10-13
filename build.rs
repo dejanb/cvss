@@ -71,8 +71,7 @@ fn generate_tests(
             if let Some(base_severity) = &case.expected.base_severity {
                 writeln!(
                     &mut generated_code,
-                    "    assert_eq!(cvss.severity.unwrap(), Severity::{});",
-                    base_severity
+                    "    assert_eq!(cvss.severity.unwrap(), Severity::{base_severity});"
                 )
                 .unwrap();
             }

@@ -3,6 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::version::VersionV4;
+use crate::Cvss;
+use crate::Severity as UnifiedSeverity;
 
 /// Represents a CVSS v4.0 score object.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -258,4 +260,30 @@ pub enum ProviderUrgency {
     Amber,
     Red,
     NotDefined,
+}
+
+impl Cvss for CvssV4 {
+    fn version(&self) -> crate::version::Version {
+        match self.version {
+            VersionV4::V4_0 => crate::version::Version::V4_0,
+        }
+    }
+
+    fn vector_string(&self) -> &str {
+        &self.vector_string
+    }
+
+    fn base_score(&self) -> f64 {
+        self.base_score
+    }
+
+    fn base_severity(&self) -> Option<UnifiedSeverity> {
+        Some(match self.base_severity {
+            Severity::None => UnifiedSeverity::None,
+            Severity::Low => UnifiedSeverity::Low,
+            Severity::Medium => UnifiedSeverity::Medium,
+            Severity::High => UnifiedSeverity::High,
+            Severity::Critical => UnifiedSeverity::Critical,
+        })
+    }
 }

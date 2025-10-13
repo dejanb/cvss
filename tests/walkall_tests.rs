@@ -1,5 +1,5 @@
 use anyhow::{anyhow, bail};
-use cvss::{v2_0::CvssV2, v3::CvssV3, v4_0::CvssV4};
+use cvss::{v2_0::CvssV2, v3::CvssV3, v4_0::CvssV4, AnyCvss, Cvss};
 use indicatif::{ParallelProgressIterator, ProgressBar, ProgressStyle};
 use rayon::prelude::*;
 use serde::Deserialize;
@@ -77,14 +77,11 @@ fn test_walkall() -> anyhow::Result<()> {
 
     let failed_files = Mutex::new(Vec::new());
 
-    files
-        .into_par_iter()
-        .progress_with(pb)
-        .for_each(|file| {
-            if let Err(e) = process(&file) {
-                failed_files.lock().unwrap().push((file, e.to_string()));
-            }
-        });
+    files.into_par_iter().progress_with(pb).for_each(|file| {
+        if let Err(e) = process(&file) {
+            failed_files.lock().unwrap().push((file, e.to_string()));
+        }
+    });
 
     let failed = failed_files.lock().unwrap();
     if !failed.is_empty() {
@@ -99,28 +96,25 @@ fn test_walkall() -> anyhow::Result<()> {
 
 fn process(path: &Path) -> anyhow::Result<()> {
     let content = fs::read(path)?;
-    let cve: CveRoot = serde_json::from_slice(&content).map_err(|e| anyhow!("Failed to deserialize CVE: {}", e))?;
+    let cve: CveRoot = serde_json::from_slice(&content)
+        .map_err(|e| anyhow!("Failed to deserialize CVE: {}", e))?;
 
     if let Some(metrics) = cve.containers.cna.metrics {
         for metric in metrics {
-            if let Some(cvss) = metric.cvss_v3_1 {
-                if !(cvss.base_score >= 0.0 && cvss.base_score <= 10.0) {
-                    bail!("Invalid base_score for CVSS v3.1: {}", cvss.base_score);
-                }
-            }
-            if let Some(cvss) = metric.cvss_v3_0 {
-                if !(cvss.base_score >= 0.0 && cvss.base_score <= 10.0) {
-                    bail!("Invalid base_score for CVSS v3.0: {}", cvss.base_score);
-                }
-            }
-            if let Some(cvss) = metric.cvss_v2_0 {
-                if !(cvss.base_score >= 0.0 && cvss.base_score <= 10.0) {
-                    bail!("Invalid base_score for CVSS v2.0: {}", cvss.base_score);
-                }
-            }
-            if let Some(cvss) = metric.cvss_v4_0 {
-                if !(cvss.base_score >= 0.0 && cvss.base_score <= 10.0) {
-                    bail!("Invalid base_score for CVSS v4.0: {}", cvss.base_score);
+            let cvss_objects: Vec<AnyCvss> = vec![
+                metric.cvss_v3_1.map(AnyCvss::V3),
+                metric.cvss_v3_0.map(AnyCvss::V3),
+                metric.cvss_v2_0.map(AnyCvss::V2),
+                metric.cvss_v4_0.map(AnyCvss::V4),
+            ]
+            .into_iter()
+            .flatten()
+            .collect();
+
+            for cvss in cvss_objects {
+                let score = cvss.base_score();
+                if !(0.0..=10.0).contains(&score) {
+                    bail!("Invalid base_score for CVSS v{}: {}", cvss.version(), score);
                 }
             }
         }
