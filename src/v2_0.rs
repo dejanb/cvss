@@ -90,10 +90,8 @@ pub enum Impact {
 }
 
 impl CvssV2 {
-    pub fn version(&self) -> crate::version::Version {
-        match self.version {
-            VersionV2::V2_0 => crate::version::Version::V2_0,
-        }
+    pub fn version(&self) -> crate::Version {
+        crate::Version::V2
     }
 
     pub fn vector_string(&self) -> &str {

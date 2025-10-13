@@ -195,10 +195,10 @@ pub enum SecurityRequirement {
 }
 
 impl CvssV3 {
-    pub fn version(&self) -> crate::version::Version {
+    pub fn version(&self) -> crate::Version {
         match self.version {
-            VersionV3::V3_0 => crate::version::Version::V3_0,
-            VersionV3::V3_1 => crate::version::Version::V3_1,
+            VersionV3::V3_0 => crate::Version::V3_0,
+            VersionV3::V3_1 => crate::Version::V3_1,
         }
     }
 

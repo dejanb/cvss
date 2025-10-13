@@ -102,8 +102,8 @@ fn process(path: &Path) -> anyhow::Result<()> {
     if let Some(metrics) = cve.containers.cna.metrics {
         for metric in metrics {
             let cvss_objects: Vec<Cvss> = vec![
-                metric.cvss_v3_1.map(Cvss::V3),
-                metric.cvss_v3_0.map(Cvss::V3),
+                metric.cvss_v3_1.map(Cvss::V3_1),
+                metric.cvss_v3_0.map(Cvss::V3_0),
                 metric.cvss_v2_0.map(Cvss::V2),
                 metric.cvss_v4_0.map(Cvss::V4),
             ]

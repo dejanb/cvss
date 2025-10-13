@@ -262,10 +262,8 @@ pub enum ProviderUrgency {
 }
 
 impl CvssV4 {
-    pub fn version(&self) -> crate::version::Version {
-        match self.version {
-            VersionV4::V4_0 => crate::version::Version::V4_0,
-        }
+    pub fn version(&self) -> crate::Version {
+        crate::Version::V4
     }
 
     pub fn vector_string(&self) -> &str {

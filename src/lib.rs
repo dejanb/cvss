@@ -33,33 +33,37 @@
 //! assert_eq!(cvss.base_severity, Severity::Critical);
 //! ```
 
+use strum::{Display, EnumDiscriminants, EnumString};
+
 pub mod v2_0;
 pub mod v3;
 pub mod v4_0;
 pub mod version;
 
 /// An enum to hold any version of a CVSS object.
+#[derive(Debug, EnumDiscriminants)]
+#[strum_discriminants(name(Version))]
+#[strum_discriminants(vis(pub))]
+#[strum_discriminants(derive(Display, EnumString))]
 pub enum Cvss {
     V2(v2_0::CvssV2),
-    V3(v3::CvssV3),
+    V3_0(v3::CvssV3),
+    V3_1(v3::CvssV3),
     V4(v4_0::CvssV4),
 }
 
 impl Cvss {
     /// Returns the version of the CVSS standard.
-    pub fn version(&self) -> version::Version {
-        match self {
-            Cvss::V2(c) => c.version(),
-            Cvss::V3(c) => c.version(),
-            Cvss::V4(c) => c.version(),
-        }
+    pub fn version(&self) -> Version {
+        self.into()
     }
 
     /// Returns the CVSS vector string.
     pub fn vector_string(&self) -> &str {
         match self {
             Cvss::V2(c) => c.vector_string(),
-            Cvss::V3(c) => c.vector_string(),
+            Cvss::V3_0(c) => c.vector_string(),
+            Cvss::V3_1(c) => c.vector_string(),
             Cvss::V4(c) => c.vector_string(),
         }
     }
@@ -68,7 +72,8 @@ impl Cvss {
     pub fn base_score(&self) -> f64 {
         match self {
             Cvss::V2(c) => c.base_score(),
-            Cvss::V3(c) => c.base_score(),
+            Cvss::V3_0(c) => c.base_score(),
+            Cvss::V3_1(c) => c.base_score(),
             Cvss::V4(c) => c.base_score(),
         }
     }
@@ -77,7 +82,8 @@ impl Cvss {
     pub fn base_severity(&self) -> Option<Severity> {
         match self {
             Cvss::V2(c) => c.base_severity(),
-            Cvss::V3(c) => c.base_severity(),
+            Cvss::V3_0(c) => c.base_severity(),
+            Cvss::V3_1(c) => c.base_severity(),
             Cvss::V4(c) => c.base_severity(),
         }
     }
