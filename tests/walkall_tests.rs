@@ -1,5 +1,5 @@
 use anyhow::{anyhow, bail};
-use cvss::{v2_0::CvssV2, v3::CvssV3, v4_0::CvssV4, AnyCvss, Cvss};
+use cvss::{v2_0::CvssV2, v3::CvssV3, v4_0::CvssV4, Cvss};
 use indicatif::{ParallelProgressIterator, ProgressBar, ProgressStyle};
 use rayon::prelude::*;
 use serde::Deserialize;
@@ -101,11 +101,11 @@ fn process(path: &Path) -> anyhow::Result<()> {
 
     if let Some(metrics) = cve.containers.cna.metrics {
         for metric in metrics {
-            let cvss_objects: Vec<AnyCvss> = vec![
-                metric.cvss_v3_1.map(AnyCvss::V3),
-                metric.cvss_v3_0.map(AnyCvss::V3),
-                metric.cvss_v2_0.map(AnyCvss::V2),
-                metric.cvss_v4_0.map(AnyCvss::V4),
+            let cvss_objects: Vec<Cvss> = vec![
+                metric.cvss_v3_1.map(Cvss::V3),
+                metric.cvss_v3_0.map(Cvss::V3),
+                metric.cvss_v2_0.map(Cvss::V2),
+                metric.cvss_v4_0.map(Cvss::V4),
             ]
             .into_iter()
             .flatten()

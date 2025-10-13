@@ -3,7 +3,6 @@
 use serde::{Deserialize, Serialize};
 
 use crate::version::VersionV3;
-use crate::Cvss;
 use crate::Severity as UnifiedSeverity;
 
 /// Represents a CVSS v3.0 or v3.1 score object.
@@ -195,23 +194,23 @@ pub enum SecurityRequirement {
     NotDefined,
 }
 
-impl Cvss for CvssV3 {
-    fn version(&self) -> crate::version::Version {
+impl CvssV3 {
+    pub fn version(&self) -> crate::version::Version {
         match self.version {
             VersionV3::V3_0 => crate::version::Version::V3_0,
             VersionV3::V3_1 => crate::version::Version::V3_1,
         }
     }
 
-    fn vector_string(&self) -> &str {
+    pub fn vector_string(&self) -> &str {
         &self.vector_string
     }
 
-    fn base_score(&self) -> f64 {
+    pub fn base_score(&self) -> f64 {
         self.base_score
     }
 
-    fn base_severity(&self) -> Option<UnifiedSeverity> {
+    pub fn base_severity(&self) -> Option<UnifiedSeverity> {
         Some(match self.base_severity {
             Severity::None => UnifiedSeverity::None,
             Severity::Low => UnifiedSeverity::Low,

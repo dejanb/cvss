@@ -39,10 +39,48 @@ pub mod v4_0;
 pub mod version;
 
 /// An enum to hold any version of a CVSS object.
-pub enum AnyCvss {
+pub enum Cvss {
     V2(v2_0::CvssV2),
     V3(v3::CvssV3),
     V4(v4_0::CvssV4),
+}
+
+impl Cvss {
+    /// Returns the version of the CVSS standard.
+    pub fn version(&self) -> version::Version {
+        match self {
+            Cvss::V2(c) => c.version(),
+            Cvss::V3(c) => c.version(),
+            Cvss::V4(c) => c.version(),
+        }
+    }
+
+    /// Returns the CVSS vector string.
+    pub fn vector_string(&self) -> &str {
+        match self {
+            Cvss::V2(c) => c.vector_string(),
+            Cvss::V3(c) => c.vector_string(),
+            Cvss::V4(c) => c.vector_string(),
+        }
+    }
+
+    /// Returns the base score.
+    pub fn base_score(&self) -> f64 {
+        match self {
+            Cvss::V2(c) => c.base_score(),
+            Cvss::V3(c) => c.base_score(),
+            Cvss::V4(c) => c.base_score(),
+        }
+    }
+
+    /// Returns the base severity.
+    pub fn base_severity(&self) -> Option<Severity> {
+        match self {
+            Cvss::V2(c) => c.base_severity(),
+            Cvss::V3(c) => c.base_severity(),
+            Cvss::V4(c) => c.base_severity(),
+        }
+    }
 }
 
 /// Represents the qualitative severity rating of a vulnerability.
@@ -53,50 +91,4 @@ pub enum Severity {
     Medium,
     High,
     Critical,
-}
-
-/// A trait for abstracting over different CVSS versions.
-pub trait Cvss {
-    /// Returns the version of the CVSS standard.
-    fn version(&self) -> version::Version;
-    /// Returns the CVSS vector string.
-    fn vector_string(&self) -> &str;
-    /// Returns the base score.
-    fn base_score(&self) -> f64;
-    /// Returns the base severity.
-    fn base_severity(&self) -> Option<Severity>;
-}
-
-impl Cvss for AnyCvss {
-    fn version(&self) -> version::Version {
-        match self {
-            AnyCvss::V2(c) => c.version(),
-            AnyCvss::V3(c) => c.version(),
-            AnyCvss::V4(c) => c.version(),
-        }
-    }
-
-    fn vector_string(&self) -> &str {
-        match self {
-            AnyCvss::V2(c) => c.vector_string(),
-            AnyCvss::V3(c) => c.vector_string(),
-            AnyCvss::V4(c) => c.vector_string(),
-        }
-    }
-
-    fn base_score(&self) -> f64 {
-        match self {
-            AnyCvss::V2(c) => c.base_score(),
-            AnyCvss::V3(c) => c.base_score(),
-            AnyCvss::V4(c) => c.base_score(),
-        }
-    }
-
-    fn base_severity(&self) -> Option<Severity> {
-        match self {
-            AnyCvss::V2(c) => c.base_severity(),
-            AnyCvss::V3(c) => c.base_severity(),
-            AnyCvss::V4(c) => c.base_severity(),
-        }
-    }
 }

@@ -3,7 +3,6 @@
 use serde::{Deserialize, Serialize};
 
 use crate::version::VersionV2;
-use crate::Cvss;
 use crate::Severity as UnifiedSeverity;
 
 /// Represents a CVSS v2.0 score object.
@@ -90,22 +89,22 @@ pub enum Impact {
     Complete,
 }
 
-impl Cvss for CvssV2 {
-    fn version(&self) -> crate::version::Version {
+impl CvssV2 {
+    pub fn version(&self) -> crate::version::Version {
         match self.version {
             VersionV2::V2_0 => crate::version::Version::V2_0,
         }
     }
 
-    fn vector_string(&self) -> &str {
+    pub fn vector_string(&self) -> &str {
         &self.vector_string
     }
 
-    fn base_score(&self) -> f64 {
+    pub fn base_score(&self) -> f64 {
         self.base_score
     }
 
-    fn base_severity(&self) -> Option<UnifiedSeverity> {
+    pub fn base_severity(&self) -> Option<UnifiedSeverity> {
         self.severity.as_ref().map(|s| match s {
             Severity::Low => UnifiedSeverity::Low,
             Severity::Medium => UnifiedSeverity::Medium,
