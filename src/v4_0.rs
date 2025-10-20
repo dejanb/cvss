@@ -2,15 +2,12 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::version::VersionV4;
 use crate::Severity as UnifiedSeverity;
 
 /// Represents a CVSS v4.0 score object.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CvssV4 {
-    /// The version of the CVSS standard, which must be "4.0".
-    pub version: VersionV4,
     /// The CVSS vector string.
     pub vector_string: String,
     /// The base score, a value between 0.0 and 10.0.
@@ -262,10 +259,6 @@ pub enum ProviderUrgency {
 }
 
 impl CvssV4 {
-    pub fn version(&self) -> crate::Version {
-        crate::Version::V4
-    }
-
     pub fn vector_string(&self) -> &str {
         &self.vector_string
     }

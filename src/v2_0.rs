@@ -2,15 +2,12 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::version::VersionV2;
 use crate::Severity as UnifiedSeverity;
 
 /// Represents a CVSS v2.0 score object.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CvssV2 {
-    /// The version of the CVSS standard.
-    pub version: VersionV2,
     /// The CVSS vector string.
     pub vector_string: String,
     /// The qualitative severity rating.
@@ -90,10 +87,6 @@ pub enum Impact {
 }
 
 impl CvssV2 {
-    pub fn version(&self) -> crate::Version {
-        crate::Version::V2
-    }
-
     pub fn vector_string(&self) -> &str {
         &self.vector_string
     }

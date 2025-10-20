@@ -8,8 +8,8 @@
 //! Deserializing a CVSS v3.1 JSON object:
 //!
 //! ```
-//! use cvss::v3::{CvssV3, Severity};
-//! use cvss::version::VersionV3;
+//! use cvss::v3::AttackVector;
+//! use cvss::{Cvss, Severity, Version};
 //!
 //! let json_data = r#"{
 //!   "version": "3.1",
@@ -26,13 +26,23 @@
 //!   "baseSeverity": "CRITICAL"
 //! }"#;
 //!
-//! let cvss: CvssV3 = serde_json::from_str(json_data).unwrap();
+//! let cvss: Cvss = serde_json::from_str(json_data).unwrap();
 //!
-//! assert_eq!(cvss.version, VersionV3::V3_1);
-//! assert_eq!(cvss.base_score, 9.8);
-//! assert_eq!(cvss.base_severity, Severity::Critical);
+//! assert_eq!(cvss.version(), Version::V3_1);
+//! assert_eq!(cvss.base_score(), 9.8);
+//! assert_eq!(cvss.base_severity().unwrap(), Severity::Critical);
+//!
+//! // We can also get the inner struct and access some of its fields
+//! if let Cvss::V3_1(cvss_v3) = cvss {
+//!     assert_eq!(cvss_v3.attack_vector, Some(AttackVector::Network));
+//! } else {
+//!     // The example should panic if the if let fails
+//!     panic!("Expected Cvss::V3_1 variant");
+//! }
 //! ```
 
+use serde::Deserialize;
+use std::fmt::{Display, Formatter};
 use strum::{Display, EnumDiscriminants, EnumString};
 
 pub mod v2_0;
@@ -41,15 +51,26 @@ pub mod v4_0;
 pub mod version;
 
 /// An enum to hold any version of a CVSS object.
-#[derive(Debug, EnumDiscriminants)]
+#[derive(Debug, Deserialize, EnumDiscriminants)]
+#[serde(tag = "version")]
 #[strum_discriminants(name(Version))]
 #[strum_discriminants(vis(pub))]
 #[strum_discriminants(derive(Display, EnumString))]
 pub enum Cvss {
+    #[serde(rename = "2.0")]
     V2(v2_0::CvssV2),
+    #[serde(rename = "3.0")]
     V3_0(v3::CvssV3),
+    #[serde(rename = "3.1")]
     V3_1(v3::CvssV3),
+    #[serde(rename = "4.0")]
     V4(v4_0::CvssV4),
+}
+
+impl Display for Cvss {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.vector_string())
+    }
 }
 
 impl Cvss {
@@ -90,7 +111,8 @@ impl Cvss {
 }
 
 /// Represents the qualitative severity rating of a vulnerability.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+#[serde(rename_all = "UPPERCASE")]
 pub enum Severity {
     None,
     Low,
