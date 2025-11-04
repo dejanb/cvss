@@ -1,0 +1,21 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write # for creating releases
+
+jobs:
+
+  ci:
+    uses: ./.github/workflows/ci.yaml
+
+  release:
+    needs:
+      - ci
+    uses: scm-rs/shared-workflows/.github/workflows/release.yaml@main
+    secrets:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
