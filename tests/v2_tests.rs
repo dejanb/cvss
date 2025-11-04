@@ -1,3 +1,5 @@
+use cvss_rs as cvss;
+
 #[test]
 fn test_v2_0_example() {
     let input_json = include_str!("data/v2_0_example.json");

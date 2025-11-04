@@ -1,4 +1,5 @@
 use cvss::v3::AttackVector;
+use cvss_rs as cvss;
 
 #[test]
 fn test_v3_1_critical() {

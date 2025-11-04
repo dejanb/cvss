@@ -1,5 +1,5 @@
 use anyhow::{anyhow, bail};
-use cvss::{v2_0::CvssV2, v3::CvssV3, v4_0::CvssV4, Cvss};
+use cvss_rs::{v2_0::CvssV2, v3::CvssV3, v4_0::CvssV4, Cvss};
 use indicatif::{ParallelProgressIterator, ProgressBar, ProgressStyle};
 use rayon::prelude::*;
 use serde::Deserialize;

@@ -8,8 +8,8 @@
 //! Deserializing a CVSS v3.1 JSON object:
 //!
 //! ```
-//! use cvss::v3::AttackVector;
-//! use cvss::{Cvss, Severity, Version};
+//! use cvss_rs::v3::AttackVector;
+//! use cvss_rs::{Cvss, Severity, Version};
 //!
 //! let json_data = r#"{
 //!   "version": "3.1",
