@@ -16,6 +16,6 @@ jobs:
   release:
     needs:
       - ci
-    uses: scm-rs/shared-workflows/.github/workflows/release.yaml@main
+    uses: ./.github/workflows/local-release.yaml
     secrets:
       CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
